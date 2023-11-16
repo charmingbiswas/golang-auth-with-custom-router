@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"encoding/json"
 	"log"
 	"strings"
@@ -88,4 +89,15 @@ func validateToken(token string, secret string) (bool, error) {
 
 	// if all checks work, that means it is a valid token
 	return true, nil
+}
+
+func hashPassword(password string, secret string) (string, error) {
+	unhashedPassword := []byte(password)
+	h := hmac.New(sha256.New, []byte(secret))
+	_, err := h.Write(unhashedPassword)
+	if err != nil {
+		return "", err
+	}
+	hashedPassword := hex.EncodeToString(h.Sum(nil))
+	return hashedPassword, nil
 }
