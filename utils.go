@@ -6,8 +6,12 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"log"
+	"net/http"
 	"strings"
+
+	"github.com/redis/go-redis/v9"
 )
 
 // function to check is db is connected, otherwise shut down server
@@ -25,7 +29,15 @@ func checkDBConnection() error {
 
 // generate auth token / custom jwt token
 // jwt has three part, 'header', 'payload' and 'signature'
-func generateToken(header string, payload map[string]string, secret string) (string, error) {
+func generateToken(payload map[string]string, secret string) (string, error) {
+	var headerMap = make(map[string]string)
+	headerMap["type"] = "jwt"
+	headerMap["alg"] = "HMAC256"
+	header, err := json.Marshal(headerMap)
+	if err != nil {
+		log.Fatal("Error generating jwt token")
+		return "", err
+	}
 	h := hmac.New(sha256.New, []byte(secret)) // create a new hash of type 256
 
 	// convert header to base64 encoded string
@@ -40,7 +52,7 @@ func generateToken(header string, payload map[string]string, secret string) (str
 	// convert payload to base64
 	payload64 := base64.StdEncoding.EncodeToString(payloadString)
 
-	unsignedString := header + string(payloadString)
+	unsignedString := string(header) + string(payloadString)
 	// write this unsigned string to the hash created earlier
 	h.Write([]byte(unsignedString))
 
@@ -100,4 +112,84 @@ func hashPassword(password string, secret string) (string, error) {
 	}
 	hashedPassword := hex.EncodeToString(h.Sum(nil))
 	return hashedPassword, nil
+}
+
+// custom error functions
+func InternalServerError(res http.ResponseWriter, message ...string) {
+	res.WriteHeader(http.StatusInternalServerError)
+	if len(message) == 0 {
+		res.Write([]byte("Something went wrong, please try again"))
+	} else {
+		res.Write([]byte(message[0]))
+	}
+}
+
+func ConflictError(res http.ResponseWriter, message ...string) {
+	res.WriteHeader(http.StatusConflict)
+	if len(message) == 0 {
+		res.Write([]byte("User already exists!"))
+	} else {
+		res.Write([]byte(message[0]))
+	}
+}
+
+func BadRequestError(res http.ResponseWriter, message ...string) {
+	res.WriteHeader(http.StatusBadRequest)
+	if len(message) == 0 {
+		res.Write([]byte("Bad request, please check the data"))
+	} else {
+		res.Write([]byte(message[0]))
+	}
+}
+
+// database functions
+func CreateNewUser(db *redis.Client, name string, email string, hashedpassword string) error {
+	key := fmt.Sprintf("user:%s", email)
+	_, err := db.HSet(ctx, key, "name", name, "password", hashedpassword).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetUser(db *redis.Client, email string, hashedPassword string) (map[string]string, error) {
+	key := fmt.Sprintf("user:%s", email)
+	result, err := db.HGetAll(ctx, key).Result()
+	if err != nil {
+		return nil, err
+	}
+
+	if result["password"] != hashedPassword {
+		return nil, fmt.Errorf("invalid credentials")
+	}
+
+	return result, nil
+}
+
+func IsUserDuplicate(db *redis.Client, email string) (bool, error) {
+	key := fmt.Sprintf("user:%s", email)
+	result, err := db.Exists(ctx, key).Result()
+	if err != nil {
+		return false, err
+	}
+	if result == 1 {
+		return true, nil
+	}
+	return false, nil
+}
+
+func CreateSession(sessionDB *redis.Client, authToken string) error {
+	result, err := sessionDB.Exists(ctx, authToken).Result()
+	if err != nil {
+		return err
+	}
+	if result == 1 {
+		return fmt.Errorf("User is already logged in")
+	}
+
+	_, err = sessionDB.Set(ctx, authToken, true, 0).Result()
+	if err != nil {
+		return err
+	}
+	return nil
 }
