@@ -17,3 +17,8 @@ This repo is pretty easy to understand.
  - Database connections are also initialized here.
  - It is setup in such a way that server will fail to start unless the database redis servers are up and running.
  - Here we are using two instances of redis database servers, one to store user data and one to maintain user _login session_
+
+### Makefile
+ -  Comes with a Makefile to start the server.
+ -  All you have to do is type 'make' in the terminal and the server will boot up on it's own.
+ -  Docker and make need to be installed on your system for this to work.
