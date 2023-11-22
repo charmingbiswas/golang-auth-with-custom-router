@@ -1,0 +1,23 @@
+services:
+  server:
+    build:
+      context: .
+    container_name: "server"
+    ports:
+      - "4000:4000"
+    depends_on:
+      - redisDB
+      - sessionsDB
+
+  
+  redisDB:
+    container_name: "database"
+    image: "redis:alpine"
+    ports:
+      - "80:6379"
+
+  sessionsDB:
+    container_name: "sessionsDB"
+    image: "redis:alpine"
+    ports:
+      - "81:6379"

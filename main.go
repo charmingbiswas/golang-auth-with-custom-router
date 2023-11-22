@@ -15,12 +15,12 @@ var ctx = context.Background()
 
 func Init() {
 	db = redis.NewClient(&redis.Options{
-		Addr:     "localhost:80",
+		Addr:     "redisDB:6379",
 		Password: "",
 		DB:       0,
 	})
 	sessionDB = redis.NewClient(&redis.Options{
-		Addr:     "localhost:81",
+		Addr:     "sessionsDB:6379",
 		Password: "",
 		DB:       0,
 	})

@@ -1,7 +1,10 @@
-DEFAULT: all
+DEFAULT: up
 
-all:
-	@go run .
+up:
+	@docker compose up
+
+down:
+	@docker compose down
 
 build:
-	@go build .
+	@docker compose build
