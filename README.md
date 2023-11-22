@@ -20,5 +20,6 @@ This repo is pretty easy to understand.
 
 ### Makefile
  -  Comes with a Makefile to start the server.
- -  All you have to do is type 'make' in the terminal and the server will boot up on it's own.
- -  Docker and make need to be installed on your system for this to work.
+ -  All you have to do to run the server is ```make build```
+ -  Then just do ```make up``` to run the containers and start up the servers.
+ -  To stop do ```ctrl+c``` and to remove all containers and related services, use ```make down```
