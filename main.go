@@ -33,7 +33,7 @@ func main() {
 
 	router.POST("/api/v1/signup", SignupHandler)
 	router.POST("/api/v1/signin", SigninHandler)
-	router.GET("/api/v1/signout", SignoutHandler)
+	router.POST("/api/v1/signout", SignoutHandler)
 
 	fmt.Println("Server starting at port 4000")
 	if err := checkDBConnection(); err != nil {

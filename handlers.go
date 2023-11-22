@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strings"
 )
 
 const secret = "my_secret_key"
@@ -168,4 +169,17 @@ func SigninHandler(res http.ResponseWriter, req *http.Request) {
 }
 
 func SignoutHandler(res http.ResponseWriter, req *http.Request) {
+	authHeader := req.Header.Get("Authorization")
+	authToken := strings.Split(authHeader, " ")[1]
+	err := DeleteSession(sessionDB, authToken)
+	if err != nil {
+		if err.Error() == "User not logged in" {
+			BadRequestError(res, "User not logged in")
+			return
+		}
+		BadRequestError(res)
+		return
+	}
+	res.WriteHeader(http.StatusOK)
+	res.Write([]byte("Successfully logged out"))
 }

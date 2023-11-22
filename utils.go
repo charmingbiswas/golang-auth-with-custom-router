@@ -193,3 +193,19 @@ func CreateSession(sessionDB *redis.Client, authToken string) error {
 	}
 	return nil
 }
+
+func DeleteSession(sessionDB *redis.Client, authToken string) error {
+	result, err := sessionDB.Exists(ctx, authToken).Result()
+	if err != nil {
+		return err
+	}
+	if result == 0 {
+		return fmt.Errorf("User not logged in")
+	}
+
+	_, err = sessionDB.Del(ctx, authToken).Result()
+	if err != nil {
+		return err
+	}
+	return nil
+}
