@@ -13,11 +13,7 @@ services:
   redisDB:
     container_name: "database"
     image: "redis:alpine"
-    ports:
-      - "80:6379"
 
   sessionsDB:
     container_name: "sessionsDB"
     image: "redis:alpine"
-    ports:
-      - "81:6379"
