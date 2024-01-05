@@ -41,6 +41,11 @@ func (r *Router) DELETE(path string, handler http.HandlerFunc) {
 }
 
 func (r Router) ServeHTTP(res http.ResponseWriter, req *http.Request) {
+	if req.Method == "OPTIONS" {
+		res.Header().Set("My-Header", "Bitch")
+		res.WriteHeader(http.StatusOK)
+		return
+	}
 	for _, route := range r.routes {
 		if route.Path == req.URL.Path && route.Method == req.Method {
 			route.Handler(res, req)

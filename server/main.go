@@ -39,5 +39,5 @@ func main() {
 	if err := checkDBConnection(); err != nil {
 		panic("Database refused to connect, shutting down server")
 	}
-	log.Fatal(http.ListenAndServe(":4000", router))
+	log.Fatal(http.ListenAndServe(":4000", CORS(router)))
 }
