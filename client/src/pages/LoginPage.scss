@@ -1,0 +1,34 @@
+.Login-Page {
+  background-image: url("painting.avif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  .Login-Card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 30%;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px 1px gray;
+    background: transparent;
+    backdrop-filter: blur(10px);
+
+    .input-box {
+      position: relative;
+
+      input {
+        background: transparent;
+        color: #fff;
+        border: none;
+        outline: none;
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+.Custom-Input {
+  position: relative;
+  width: 40%;
+
+  input {
+    position: relative;
+    border: none;
+    box-shadow: none;
+    outline: none;
+    background: transparent;
+    color: #fff;
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
+    width: 100%;
+
+    &:valid ~ span,
+    &:focus ~ span {
+      color: #2196f3;
+      transform: translateY(-100%);
+    }
+  }
+  span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    pointer-events: none;
+    letter-spacing: 0.1rem;
+    transition: 0.5s;
+  }
+
+  i {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0.1rem;
+    background: #fff;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      animation: animate 2s linear infinite;
+    }
+  }
+
+  @keyframes animate {
+    0% {
+      background-position-x: 0;
+    }
+
+    100% {
+      background-position-x: auto;
+    }
+  }
+}
