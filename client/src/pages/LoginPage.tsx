@@ -102,7 +102,7 @@ const LoginPage = () => {
           </CustomButton>
           <Typography color="white">
             New Customer?{" "}
-            <Button variant="outlined" size="medium" onClick={changePage}>
+            <Button variant="contained" size="medium" onClick={changePage}>
               Sign Up
             </Button>
           </Typography>
@@ -115,7 +115,7 @@ const LoginPage = () => {
           <CustomButton styles={{ width: "10rem" }} onClick={handleClick}>
             Signup
           </CustomButton>
-          <Button variant="outlined" size="medium" onClick={changePage}>
+          <Button variant="contained" size="medium" onClick={changePage}>
             Back To Login
           </Button>
         </div>
