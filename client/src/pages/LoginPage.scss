@@ -4,7 +4,8 @@
   background-size: cover;
   width: 100%;
   height: 100%;
-  .Login-Card {
+  .Login-Card,
+  .Signup-Card {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -19,16 +20,5 @@
     box-shadow: 0 0 10px 1px gray;
     background: transparent;
     backdrop-filter: blur(10px);
-
-    .input-box {
-      position: relative;
-
-      input {
-        background: transparent;
-        color: #fff;
-        border: none;
-        outline: none;
-      }
-    }
   }
 }
