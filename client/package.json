@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "prestart": "npm run build",
+    "start": "serve ./dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -16,7 +18,8 @@
     "axios": "^1.6.4",
     "framer-motion": "^10.17.6",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "serve": "^14.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
